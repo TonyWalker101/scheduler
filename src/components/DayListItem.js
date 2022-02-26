@@ -2,8 +2,6 @@ import React from "react";
 import classNames from "classnames";
 import "components/DayListItem.scss";
 
-// create setDay state using setState??? 
-
 export default function DayListItem(props) {
 
   const DayListItemClass = classNames("day-list__item", {
