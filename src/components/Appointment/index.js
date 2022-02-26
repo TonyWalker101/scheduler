@@ -3,6 +3,8 @@ import "components/Appointment/styles.scss";
 
 export default function Appointment(props) {
 
+  // self created
+  
   const formatTime = () => {
     if(props.time) {
       return `Appointment at ${props.time}`
