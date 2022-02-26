@@ -15,10 +15,10 @@ export default function InterviewListItem(props) {
     >
     <img
       className="interviewers__item-image"
-      src="https://i.imgur.com/LpaY82x.png"
-      alt="Sylvia Palmer"
+      src={props.avatar}
+      alt={props.name}
     />
-      {props.selected && 'Sylvia Palmer'}
+      {props.selected && props.name}
     </li>
   );
 }
