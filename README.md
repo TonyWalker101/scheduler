@@ -1,5 +1,7 @@
 # Interview Scheduler
 
+A web application that simulates the creation and organization of appointments. Created for educational purposes by Tony Walker. 
+
 ## Setup
 
 Install dependencies with `npm install`.
