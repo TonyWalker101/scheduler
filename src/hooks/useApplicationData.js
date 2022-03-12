@@ -22,12 +22,12 @@ export default function useApplicationData() {
       axios.get(appointmentsURL),
       axios.get(interviewersURL)
     ]).then((all) => {
-      setState(prev => ({...prev, days: all[0].data, appointments: all[1].data, interviewers: all[2].data}));
-    });
+      setState(prev => ({...prev, days: all[0].data, appointments: all[1].data, interviewers: all[2].data}))
+    })
 
   }, []);
 
-  function bookInterview(id, interview) {
+  function bookInterview(id, interview, mode) {
 
     const appointment = {
       ...state.appointments[id],
@@ -39,19 +39,43 @@ export default function useApplicationData() {
       [id]: appointment
     };
 
+    const days = mode === "EDIT" ? updateSpots(0) : updateSpots(-1)
+
     return axios.put(`/api/appointments/${id}`, {interview})
     .then(setState({
       ...state,
-      appointments
+      appointments,
+      days
     }));
   }
 
   function cancelInterview(id) {
 
     return axios.delete(`/api/appointments/${id}`)
-    .then(setState({
-      ...state,
-    }));
+    .then( () => {
+
+      const days = updateSpots(1);
+
+      setState({
+        ...state,
+        days
+      })
+    })
+    
+  }
+
+  function updateSpots(num) {
+
+    const currentDayObject = state.days.find(x => x.name === state.day);
+
+    const newDays = [...state.days];
+    
+    newDays.forEach(x => {
+      return currentDayObject.name === x.name ? currentDayObject.spots += num : x
+    })
+
+    return newDays;
+
   }
 
   return {
