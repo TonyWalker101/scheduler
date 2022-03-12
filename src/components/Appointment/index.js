@@ -38,7 +38,7 @@ export default function Appointment(props) {
 
     transition(SAVING);
 
-    props.bookInterview(props.id, interview)
+    props.bookInterview(props.id, interview, mode)
     .then(() => {transition(SHOW)})
     .catch((err) => transition(ERROR_SAVE, true));
   }
