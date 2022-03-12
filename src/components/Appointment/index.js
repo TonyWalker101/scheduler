@@ -7,6 +7,7 @@ import Status from "./Status";
 import Confirm from "./Confirm";
 import useVisualMode from "hooks/useVisualMode";
 import Form from "./Form";
+import Error from "./Error";
 
 const EMPTY = "EMPTY";
 const SHOW = "SHOW";
@@ -15,8 +16,12 @@ const SAVING = "SAVING";
 const CONFIRM = "CONFIRM";
 const DELETE = "DELETE";
 const EDIT = "EDIT";
+const ERROR_SAVE = "ERROR_SAVE";
+const ERROR_DELETE = "ERROR_DELETE";
 
 const deleteWarning = "Are you sure you want to delete this interview?";
+const errorDeleteMessage = "Oops! An error occured while trying to delete this interview.";
+const errorSaveMessage = "Oops! An error occured while trying to save this interview.";
 
 export default function Appointment(props) {
 
@@ -34,17 +39,17 @@ export default function Appointment(props) {
     transition(SAVING);
 
     props.bookInterview(props.id, interview)
-    .then(() => {
-      transition(SHOW)
-    });
+    .then(() => {transition(SHOW)})
+    .catch((err) => transition(ERROR_SAVE, true));
   }
 
   function remove(id) {
 
-    transition(DELETE);
+    transition(DELETE, true);
     
     props.cancelInterview(id)
-    .then(() => transition(EMPTY));
+    .then(() => transition(EMPTY))
+    .catch((err) => transition(ERROR_DELETE, true));
   }
 
   function confirmingDelete() {
@@ -72,5 +77,7 @@ export default function Appointment(props) {
       {mode === SAVING && <Status message="Saving"/>}
       {mode === DELETE && <Status message="Deleting"/>}
       {mode === CONFIRM && <Confirm message={deleteWarning} onCancel={()=> back()} onConfirm={() => remove(props.id)}/>}
+      {mode === ERROR_SAVE && <Error message={errorSaveMessage} onClose={() => back()}/>}
+      {mode === ERROR_DELETE && <Error message={errorDeleteMessage} onClose={() => back()}/>}
   </article>);
 }
