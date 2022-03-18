@@ -23,6 +23,7 @@ export default function Form(props) {
     if (interviewer && student !== "") {
       props.onSave(student, interviewer);
     }
+    return;
   };
 
   return (
