@@ -19,6 +19,12 @@ export default function Form(props) {
     return;
   };
 
+  const validateData = () => {
+    if (interviewer && student !== "") {
+      props.onSave(student, interviewer);
+    }
+  };
+
   return (
 
     <main className="appointment__card appointment__card--create">
@@ -41,7 +47,7 @@ export default function Form(props) {
       <section className="appointment__card-right">
         <section className="appointment__actions">
           <Button danger onClick={cancel}>Cancel</Button>
-          <Button confirm onClick={() => props.onSave(student, interviewer)}>Save</Button>
+          <Button confirm onClick={() => validateData()}>Save</Button>
         </section>
       </section>
     </main>
