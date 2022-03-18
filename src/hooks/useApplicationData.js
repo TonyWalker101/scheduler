@@ -38,45 +38,65 @@ export default function useApplicationData() {
       ...state.appointments,
       [id]: appointment
     };
-
-    const days = mode === "EDIT" ? updateSpots(0) : updateSpots(-1)
+    
+    const days = updateSpots(appointments);
 
     return axios.put(`/api/appointments/${id}`, {interview})
-    .then(setState({
-      ...state,
-      appointments,
-      days
-    }));
+    .then( () => setState({...state,appointments,days}))
   }
 
   function cancelInterview(id) {
 
+    const appointment = {
+      ...state.appointments[id],
+      interview: null
+    };
+
+    const appointments = {
+      ...state.appointments,
+      [id]: appointment
+    };
+
     return axios.delete(`/api/appointments/${id}`)
     .then( () => {
 
-      const days = updateSpots(1);
+      const days = updateSpots(appointments);
 
       setState({
         ...state,
-        days
+        days,
+        appointments
       })
     })
     
   }
 
-  function updateSpots(num) {
-
-    const currentDayObject = state.days.find(x => x.name === state.day);
-
-    const newDays = [...state.days];
+  function updateSpots(appointments) {
     
-    newDays.forEach(x => {
-      return currentDayObject.name === x.name ? currentDayObject.spots += num : x
+    const newDays = [];
+    
+    const getSpotsForDay= (day) => {
+      
+      let counter = 0;
+
+      day.appointments.forEach(appointmentID => {
+
+        if(appointments[appointmentID].interview === null) {
+          counter++;
+        }
+      })
+      return counter;
+
+    }
+
+    state.days.forEach(day => {
+      newDays.push({...day, spots: getSpotsForDay(day)})
     })
-
+  
     return newDays;
-
+  
   }
+  
 
   return {
     state,
