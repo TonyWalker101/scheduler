@@ -1,6 +1,6 @@
 import React from "react";
 
-import { render, cleanup, fireEvent, getByText } from "@testing-library/react";
+import { render, cleanup, fireEvent } from "@testing-library/react";
 
 // import Appointment from "../Appointment/index";
 import Form from "../Appointment/Form";
